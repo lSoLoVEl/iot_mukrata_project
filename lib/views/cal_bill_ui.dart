@@ -55,7 +55,30 @@ class _CallBillUIState extends State<CallBillUI> {
       imgFile = File(image.path);
     });
   }
- 
+
+      //สร้างเมธอดแสดงข้อความเตือน
+  Future<void> showWarningDialog(context, msg) async {​​
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {​​
+        return AlertDialog(
+          title: const Text('คำเตือน'),
+          content: Text(
+            msg,
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('ตกลง'),
+              onPressed: () {​​
+                Navigator.of(context).pop();
+              }​​,
+            ),
+          ],
+        );
+      }​​,
+    );
+  }​​
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -343,7 +366,50 @@ class _CallBillUIState extends State<CallBillUI> {
                   children: [
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          //Validate UI
+                          if(isAdult == ture && adultCtrl.text.isEmpty || adultCtrl.text == '0'){
+                          showWarningDialog(context,'กรุณากรอกจำนวนผู้ใหญ่ด้วย');
+                          }else if(isChild == ture && childCtrl.text.isEmpty ||childCtrl.text == '0'){
+                            showWarningDialog(context,'กรุณากรอกจำนวนเด็กด้วย');
+                          }else{
+                            //คำนวณเงินได้แล้ว
+                            //เตรียมข้อมูลที่ต้องใช้เพื่อการคำนวณ
+                            int numAdult = isAdult == ture ? int.parse(adultCtrl.text):0;
+                            int numChild = isChild == ture ? int.parse(childCtrl.text):0;
+                            int numCoke = cokeCtrl.text.isEmpty ? 0 : int.parse(cokeCtrl.text);
+                            int numPure = pureCtrl.text.isEmpty ? 0 : int.parse(pureCtrl.text);
+                            if(_selectedMember == 'สมาชิกทั่วไปลด 10%'){
+                              sale = 0.1;
+                            }else if(_selectedMember == 'สมาชิก VIP ลด20%'){
+                              sale = 0.2;
+                            }
+                            double payWaterBuffet = groupWater == 1 ? 25.0 * (numAdult+numChild) : 0.0;
+                            //ไม่มีส่วนลด
+                            double payBuffetTotal = (numAdult*299.0)+(numChild*69.0)+(numCoke*20)+(numPure*15)+payWaterBuffet;
+                            //มีส่วนลด
+                            double paySale = payBuffetTotalNoSale = sale;
+                            //คำนวณที่ต้องจ่ายหลังหักส่วนลด
+                            double payBuffetTotal =payBuffetTotalNoSale - paySale;
+                            //ส่งค่าต่างๆ ไปแสดงที่หน้า showBillUI)()
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:(context)=>ShowBillUI(
+                                  numAdult:numAdult,
+                                  numChild:numChild,
+                                  numCoke:numCoke,
+                                  payWaterBuffet:payWaterBuffet,
+                                  payBuffetTotalNoSale:payBuffetTotalNoSale,
+                                  paySale:paySale,
+                                  payBuffetTotal:payBuffetTotal,
+                                  imageFile:imageFile,
+                                ),
+                              ),
+                            );
+
+                          }
+                        },
                         icon: Icon(
                           Icons.calculate,
                           color: Colors.white,
@@ -364,7 +430,21 @@ class _CallBillUIState extends State<CallBillUI> {
                     ),
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          //ทุกอย่างบนหน้าจอกลับเป็นค่าเริ่มต้นเหมือนเดิม
+                          setState((){
+                            imageFile = null;
+                            isAdult = false;
+                            isChild = false;
+                            isWater = false;
+                            adultCtrl.clear();
+                            childCtrl.clear();
+                            cokeCtrl.clear();
+                            pureCtrl.clear();
+                            groupWater=1;
+                            _selectedMember='ไม่เป็นสมาชิก';
+                          });
+                        },
                         icon: Icon(
                           Icons.cancel,
                           color: Colors.white,
