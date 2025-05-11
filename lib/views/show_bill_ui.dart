@@ -1,9 +1,9 @@
 import 'dart:io';
- 
+
 import 'package:flutter/material.dart';
- 
-class ShowBillUI extends StatefulWidget {
-  //สร้างตัวแปรเพื่อรับข้อมูลที่จะส่งมาจากหน้า CallBillUI()
+
+class ShowBillUi extends StatefulWidget {
+  //สร้างตัวแปรเพือรับข้อมูลจาก CallBillUi
   int? numAdult;
   int? numChild;
   int? numCoke;
@@ -12,10 +12,10 @@ class ShowBillUI extends StatefulWidget {
   double? payBuffetTotalNoSale;
   double? paySale;
   double? payBuffetTotal;
-  File? imageFile;
- 
-  //เอาตัวแปรที่สร้างไปรับข้อมูลที่ส่งมา
-  ShowBillUI({
+  File? imagefile;
+
+  //เอาตัวแปรที่สร้างไปรับข้อมูลที่ส่งมาจาก CallBillUi
+  ShowBillUi({
     super.key,
     this.numAdult,
     this.numChild,
@@ -25,25 +25,20 @@ class ShowBillUI extends StatefulWidget {
     this.payBuffetTotalNoSale,
     this.paySale,
     this.payBuffetTotal,
-    this.imageFile,
+    File? imagefile,
   });
- 
+
   @override
-  State<ShowBillUI> createState() => _ShowBillUIState();
+  State<ShowBillUi> createState() => _ShowBillUiState();
 }
- 
-class _ShowBillUIState extends State<ShowBillUI> {
+
+class _ShowBillUiState extends State<ShowBillUi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepOrange,
-        title: Text(
-          'ใบเสร็จรับเงิน',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
+        backgroundColor: Colors.indigo,
+        title: Text('ใบเสร็จรับเงิน'),
         centerTitle: true,
         leading: IconButton(
           icon: Icon(
@@ -62,14 +57,14 @@ class _ShowBillUIState extends State<ShowBillUI> {
               SizedBox(
                 height: 40,
               ),
-              widget.imageFile == null
+              widget.imagefile == null
                   ? Image.asset(
-                      'assets/images/camera.jpg',
+                      'assets/icon/Microsoft-Fluentui-Emoji-3d-Shallow-Pan-Of-Food-3d.512.png',
                       width: 150,
                       height: 150,
                     )
                   : Image.file(
-                      widget.imageFile!,
+                      widget.imagefile!,
                       width: 200,
                       height: 200,
                     ),
@@ -79,7 +74,7 @@ class _ShowBillUIState extends State<ShowBillUI> {
               Text(
                 'รายละเอียดใบเสร็จรับเงิน',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -88,36 +83,54 @@ class _ShowBillUIState extends State<ShowBillUI> {
               ),
               Text(
                 'จำนวนผู้ใหญ่ ${widget.numAdult} คน',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
               ),
               SizedBox(
                 height: 20,
               ),
               Text(
-                'จำนวนผู้เด็ก ${widget.numChild} คน',
+                'จำนวนเด็ก ${widget.numChild} คน',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
               ),
               SizedBox(
                 height: 20,
               ),
               Text(
-                'จำนวนโค้ก ${widget.numCoke} ขวด',
+                'จำนวนโค้ก ${widget.numCoke} ขวด  ',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
               ),
               SizedBox(
                 height: 20,
               ),
               Text(
                 'จำนวนน้ำเปล่า ${widget.numPure} ขวด',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
               ),
               SizedBox(
                 height: 20,
               ),
               Text(
-                'จำนวนเงินบุฟเฟต์น้ำ ${widget.payWaterBuffet} บาท',
+                'จำนวนเงินบุฟเฟ่ต์น้ำ ${widget.payWaterBuffet} บาท',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
               ),
               SizedBox(
                 height: 20,
               ),
               Text(
                 'ส่วนลดเป็นเงิน ${widget.paySale} บาท',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
               ),
               SizedBox(
                 height: 20,
@@ -125,9 +138,9 @@ class _ShowBillUIState extends State<ShowBillUI> {
               Text(
                 'รวมต้องจ่าย ${widget.payBuffetTotal} บาท',
                 style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
                   color: Colors.red,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(
@@ -135,12 +148,9 @@ class _ShowBillUIState extends State<ShowBillUI> {
               ),
               Image.asset(
                 'assets/images/payqr.png',
-                width: 250,
-                height: 250,
-              ),
-              SizedBox(
-                height: 20,
-              ),
+                width: 150,
+                height: 150,
+              )
             ],
           ),
         ),

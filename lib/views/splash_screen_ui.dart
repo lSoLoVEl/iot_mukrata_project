@@ -10,43 +10,47 @@ class SplashScreenUi extends StatefulWidget {
 
 class _SplashScreenUiState extends State<SplashScreenUi> {
   @override
-
   void initState() {
-    // โค๊ด Splash Screen
+    // Code splash screen
     Future.delayed(
-      //ระยะเวลาที่หน่วง
+      // ระยะเวลาที่หน่วง
       Duration(seconds: 3),
-      //พอครบเวลาหน่วง ให้ทำอะไร
-      ()=>Navigator.pushReplacement(
+      // พอครบเวลาหน่วงแล้วให้ทำอย่างไร
+      () => Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(
-          builder: (context) => HomeUI(),
+          builder: (context) => HomeUi(),
         ),
       ),
     );
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.deepOrange,
+      backgroundColor: Colors.indigoAccent,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Replace this with your logo or image asset if needed
             ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
               child: Image.asset(
-                'assets/images/logo.png',  // Uncomment this line when you have the logo
-                width: MediaQuery.of(context).size.width * 0.7, // Responsive width
+                'assets/images/logo.png',
+                width: MediaQuery.of(context).size.width * 0.70,
               ),
             ),
-            SizedBox(height: 50.0),
-            CircularProgressIndicator(
-              color: Colors.white,
+            SizedBox(
+              height: 50.0,
             ),
-            SizedBox(height: 50.0),
+            CircularProgressIndicator(
+              color: Colors.blue,
+            ),
+            SizedBox(
+              height: 50.0,
+            ),
             Text(
               'Tech SAU BUFFET',
               style: TextStyle(
@@ -55,12 +59,10 @@ class _SplashScreenUiState extends State<SplashScreenUi> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 10.0),  // Small spacing between text elements
             Text(
-              'Copyright © 2025 by Sorawit',
+              'Copyright © 2025 by Rapatsara',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 14.0, // Slightly smaller font size for the copyright text
               ),
             ),
           ],

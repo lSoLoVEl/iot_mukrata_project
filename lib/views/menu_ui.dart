@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
- 
+
+
+
 class MenuUI extends StatefulWidget {
   const MenuUI({super.key});
- 
+
   @override
   State<MenuUI> createState() => _MenuUIState();
 }
- 
+
 class _MenuUIState extends State<MenuUI> {
   //สร้างตัวแปรเก็บรูปที่จะไปแสดงที่ ListView เมนูหมูกระทะ
   List<String> menuList = [
@@ -18,7 +20,7 @@ class _MenuUIState extends State<MenuUI> {
     'assets/images/img6.png',
     'assets/images/img7.png',
   ];
- 
+
   //สร้างตัวแปรเก็บรูปที่จะไปแสดงที่ ListView สาขาร้านหมูกระทะ
   List<String> branchList = [
     'assets/images/shop1.png',
@@ -27,15 +29,25 @@ class _MenuUIState extends State<MenuUI> {
     'assets/images/shop4.png',
     'assets/images/shop5.png',
   ];
-  //สร้างตัวแปรเก็บเบอร์โทร
+
+  //สร้างตัวแปรเก็บเบอร์โทรร้านสาขา 5 ร้าน
   List<String> phoneList = [
-    '081-000-0000',
-    '082-000-0000',
-    '083-000-0000',
-    '084-000-0000',
-    '085-000-0000',
+    '1112',
+    '1150',
+    '1344',
+    '1145',
+    '1642',
   ];
- 
+
+  //เมธอดโทร
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await (launchUri);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,7 +99,7 @@ class _MenuUIState extends State<MenuUI> {
               ),
             ),
             SizedBox(
-              height: 10.0,
+              height: 30.0,
             ),
             Text(
               'ร้านในเครือ',
@@ -96,15 +108,14 @@ class _MenuUIState extends State<MenuUI> {
                 fontSize: 18.0,
               ),
             ),
-             SizedBox(
+            SizedBox(
               height: 10.0,
             ),
             Expanded(
               child: Container(
-               
                 margin: EdgeInsets.only(
-                  left: 50.0,
-                  right: 50.0,
+                  left: 65.0,
+                  right: 65.0,
                 ),
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,

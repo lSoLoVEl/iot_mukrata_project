@@ -1,37 +1,39 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+
 import 'package:image_picker/image_picker.dart';
- 
-class CallBillUI extends StatefulWidget {
-  const CallBillUI({super.key});
- 
+import 'package:iot_mukrata_project/views/show_bill_ui.dart';
+
+class CallBillUi extends StatefulWidget {
+  const CallBillUi({super.key});
+
   @override
-  State<CallBillUI> createState() => _CallBillUIState();
+  State<CallBillUi> createState() => _CallBillUiState();
 }
- 
-class _CallBillUIState extends State<CallBillUI> {
+
+class _CallBillUiState extends State<CallBillUi> {
   //สร้างตัวแปรเก็บรูปที่ได้จากกล้อง-แกลอรี่
   File? imgFile;
- 
+
   //สรัางตัวแปรเก็บสถานะเลือกผู้ใหญ่ และเด็ก
   bool? isAdult = false;
   bool? isChild = false;
- 
+
   //สร้างตัวแปรเก็บสถานะใช้ได้ ใช้ไม่ได้ของป้อนโค้ก น้ำเปล่า
   bool? isWater = false;
- 
+
   //สร้างตัวควบคุม TextField
   TextEditingController adultCtrl = TextEditingController();
   TextEditingController childCtrl = TextEditingController();
   TextEditingController cokeCtrl = TextEditingController();
   TextEditingController pureCtrl = TextEditingController();
- 
+
   //สร้างตัวแปรสำหรับ Radio เพื่อให้อยู่กลุ่มเดียว
   int? groupWater = 1;
- 
+
   //สร้างตัวแปรเก็บค่าที่เลือกจาก Dropdown
   String? _selectedMember = 'ไม่เป็นสมาชิก';
- 
+
   //สร้างเมธอดเปิดกล้อง
   Future<void> openCamera() async {
     //เปิดกล้องเพื่อถ่าย
@@ -43,7 +45,7 @@ class _CallBillUIState extends State<CallBillUI> {
       imgFile = File(image.path);
     });
   }
- 
+
   //สร้างเมธอดเปิดแกลอรี่
   Future<void> openGallery() async {
     //เปิดแกลอรี่เพื่อเลือก
@@ -56,12 +58,11 @@ class _CallBillUIState extends State<CallBillUI> {
     });
   }
 
-      //สร้างเมธอดแสดงข้อความเตือน
-  Future<void> showWarningDialog(context, msg) async {​​
+  Future<void> showWarningDialog(context, msg) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {​​
+      builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('คำเตือน'),
           content: Text(
@@ -70,15 +71,16 @@ class _CallBillUIState extends State<CallBillUI> {
           actions: <Widget>[
             TextButton(
               child: const Text('ตกลง'),
-              onPressed: () {​​
+              onPressed: () {
                 Navigator.of(context).pop();
-              }​​,
+              },
             ),
           ],
         );
-      }​​,
+      },
     );
-  }​​
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +103,8 @@ class _CallBillUIState extends State<CallBillUI> {
                         children: [
                           ListTile(
                             onTap: () {
-                              openCamera().then((value) => {Navigator.pop(context)});
+                              openCamera()
+                                  .then((value) => {Navigator.pop(context)});
                             },
                             leading: Icon(
                               Icons.camera_alt,
@@ -117,7 +120,8 @@ class _CallBillUIState extends State<CallBillUI> {
                           Divider(),
                           ListTile(
                             onTap: () {
-                              openGallery().then((value) => {Navigator.pop(context)});
+                              openGallery()
+                                  .then((value) => {Navigator.pop(context)});
                             },
                             leading: Icon(
                               Icons.camera,
@@ -136,7 +140,7 @@ class _CallBillUIState extends State<CallBillUI> {
                   },
                   child: imgFile == null
                       ? Image.asset(
-                          'assets/images/camera.jpg',
+                          'assets/icon/Microsoft-Fluentui-Emoji-3d-Shallow-Pan-Of-Food-3d.512.png',
                           width: 130.0,
                           height: 130.0,
                           fit: BoxFit.cover,
@@ -344,13 +348,19 @@ class _CallBillUIState extends State<CallBillUI> {
                             _selectedMember = value;
                           });
                         },
-                        items: <String>['ไม่เป็นสมาชิก', 'สมาชิกทั่วไปลด 10%', 'สมาชิก VIP ลด 20%'].map((String value) {
+                        items: <String>[
+                          'ไม่เป็นสมาชิก',
+                          'สมาชิกทั่วไปลด 10%',
+                          'สมาชิก VIP ลด 20%'
+                        ].map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(
                               value,
                               style: TextStyle(
-                                color: _selectedMember == value ? Colors.red : Colors.black,
+                                color: _selectedMember == value
+                                    ? Colors.red
+                                    : Colors.black,
                               ),
                             ),
                           );
@@ -368,46 +378,64 @@ class _CallBillUIState extends State<CallBillUI> {
                       child: ElevatedButton.icon(
                         onPressed: () {
                           //Validate UI
-                          if(isAdult == ture && adultCtrl.text.isEmpty || adultCtrl.text == '0'){
-                          showWarningDialog(context,'กรุณากรอกจำนวนผู้ใหญ่ด้วย');
-                          }else if(isChild == ture && childCtrl.text.isEmpty ||childCtrl.text == '0'){
-                            showWarningDialog(context,'กรุณากรอกจำนวนเด็กด้วย');
-                          }else{
-                            //คำนวณเงินได้แล้ว
-                            //เตรียมข้อมูลที่ต้องใช้เพื่อการคำนวณ
-                            int numAdult = isAdult == ture ? int.parse(adultCtrl.text):0;
-                            int numChild = isChild == ture ? int.parse(childCtrl.text):0;
-                            int numCoke = cokeCtrl.text.isEmpty ? 0 : int.parse(cokeCtrl.text);
-                            int numPure = pureCtrl.text.isEmpty ? 0 : int.parse(pureCtrl.text);
-                            if(_selectedMember == 'สมาชิกทั่วไปลด 10%'){
+                          if (isAdult == true && adultCtrl.text.isEmpty ||
+                              adultCtrl.text == '0') {
+                            showWarningDialog(context, 'กรุณากรอกจำนวนผู้ใหญ่');
+                          } else if (isChild == true &&
+                                  childCtrl.text.isEmpty ||
+                              childCtrl.text == '0') {
+                            showWarningDialog(context, 'กรุณากรอกจำนวนเด็ก');
+                          } else {
+                            // คำนวณ
+                            //เตรียมข้อมูลส่งไปหน้าคำนวณ
+                            int numAdult =
+                                isAdult == true ? int.parse(adultCtrl.text) : 0;
+                            int numChild =
+                                isChild == true ? int.parse(childCtrl.text) : 0;
+                            int numCoke = cokeCtrl.text.isEmpty
+                                ? 0
+                                : int.parse(cokeCtrl.text);
+                            int numPure = pureCtrl.text.isEmpty
+                                ? 0
+                                : int.parse(pureCtrl.text);
+                            double sale = 0.0;
+                            if (_selectedMember == 'สมาชิกทั่วไปลด 10%') {
                               sale = 0.1;
-                            }else if(_selectedMember == 'สมาชิก VIP ลด20%'){
+                            } else if (_selectedMember == 'สมาชิก VIP ลด 20%') {
                               sale = 0.2;
                             }
-                            double payWaterBuffet = groupWater == 1 ? 25.0 * (numAdult+numChild) : 0.0;
-                            //ไม่มีส่วนลด
-                            double payBuffetTotal = (numAdult*299.0)+(numChild*69.0)+(numCoke*20)+(numPure*15)+payWaterBuffet;
-                            //มีส่วนลด
-                            double paySale = payBuffetTotalNoSale = sale;
-                            //คำนวณที่ต้องจ่ายหลังหักส่วนลด
-                            double payBuffetTotal =payBuffetTotalNoSale - paySale;
-                            //ส่งค่าต่างๆ ไปแสดงที่หน้า showBillUI)()
+                            double payWaterBuffet = groupWater == 1
+                                ? 25.0 * (numAdult + numChild)
+                                : 0.0;
+                            // คำนวณค่าบุฟเฟต์ยังไม่รวมโปรโมชั่น
+                            double payBuffetTotalNosale = (299.0 * numAdult) +
+                                (69.0 * numChild) +
+                                (numCoke * 20.0) +
+                                (numPure * 15.0) +
+                                payWaterBuffet;
+                            // คำนวณส่วนลด
+                            double paySale = payBuffetTotalNosale * sale;
+                            // คำนวณค่าบุฟเฟต์รวมโปรโมชั่น
+                            double payBuffetTotal =
+                                payBuffetTotalNosale - paySale;
+
+                            //ส่งค่าต่างๆ ไปหน้า ShowBillUi
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder:(context)=>ShowBillUI(
-                                  numAdult:numAdult,
-                                  numChild:numChild,
-                                  numCoke:numCoke,
-                                  payWaterBuffet:payWaterBuffet,
-                                  payBuffetTotalNoSale:payBuffetTotalNoSale,
-                                  paySale:paySale,
-                                  payBuffetTotal:payBuffetTotal,
-                                  imageFile:imageFile,
+                                builder: (context) =>ShowBillUi(
+                                  numAdult: numAdult,
+                                  numChild: numChild,
+                                  numCoke: numCoke,
+                                  numPure: numPure,
+                                  payWaterBuffet: payWaterBuffet,
+                                  payBuffetTotalNoSale: payBuffetTotalNosale,
+                                  paySale: paySale,
+                                  payBuffetTotal: payBuffetTotal,
+                                  imagefile: imgFile,
                                 ),
                               ),
                             );
-
                           }
                         },
                         icon: Icon(
@@ -431,9 +459,9 @@ class _CallBillUIState extends State<CallBillUI> {
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          //ทุกอย่างบนหน้าจอกลับเป็นค่าเริ่มต้นเหมือนเดิม
-                          setState((){
-                            imageFile = null;
+                          //ทุกอย่างบนหน้าจอกลับไปเริ่มต้น
+                          setState(() {
+                            imgFile = null;
                             isAdult = false;
                             isChild = false;
                             isWater = false;
@@ -441,8 +469,8 @@ class _CallBillUIState extends State<CallBillUI> {
                             childCtrl.clear();
                             cokeCtrl.clear();
                             pureCtrl.clear();
-                            groupWater=1;
-                            _selectedMember='ไม่เป็นสมาชิก';
+                            groupWater = 1;
+                            _selectedMember = 'ไม่เป็นสมาชิก';
                           });
                         },
                         icon: Icon(
